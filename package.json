@@ -11,7 +11,7 @@
   },
   "scripts": {
     "clean": "rimraf ./lib && mkdir lib",
-    "clean:test": "rimraf ./test/output && mkdir test/output",
+    "clean:test": "rimraf ./test/output && mkdir test\\output",
     "clean:compile": "rimraf ./lib/compiled",
     "compile:rollup": "rollup -c",
     "compile": "npm run clean && npm run compile:rollup && npm run clean:compile",

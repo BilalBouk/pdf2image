@@ -12,7 +12,7 @@ export default class PDF2Pic {
     density: 72,
     savedir: "./",
     savename: "untitled",
-    compression: "jpeg"
+    compression: "jpeg",
   }
 
   constructor(options = {}) {
@@ -27,7 +27,10 @@ export default class PDF2Pic {
    */
   identify(filepath, argument) {
     let image = gm(filepath)
-
+    const { gmOptions } = this.options
+    if (gmOptions) {
+      Object.keys(this.options.gmOptions).forEach(key => image._options[key] = gmOptions[key])
+    }
     return new Promise((resolve, reject) => {
       if (argument) {
         image.identify(argument, (error, data) => {
@@ -60,17 +63,19 @@ export default class PDF2Pic {
 
     const width = size.split(/x/i)[0]
     const height = size.split(/x/i)[1]
-
+    const image = gm(stream, filename)
+    const { gmOptions } = this.options
+    if (gmOptions) {
+      Object.keys(this.options.gmOptions).forEach(key => image._options[key] = gmOptions[key])
+    }
     if (!height) {
-      return gm(stream, filename)
-        .density(density, density)
+      return image.density(density, density)
         .resize(size)
         .quality(quality)
         .compress(compression)
     }
 
-    return gm(stream, filename)
-      .density(density, density)
+    return image.density(density, density)
       .resize(width, height)
       .quality(quality)
       .compress(compression)
